@@ -8,9 +8,9 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace com.opusmagus.office.openxml
 {
-    public class OpenDocument
+    public class OpenDocument : IOpenDocument
     {
-        public static void ReplaceProperties(string sourceDocPath, string targetDocPath, Dictionary<string, string> bookmarks)
+        public void ReplaceProperties(string sourceDocPath, string targetDocPath, Dictionary<string, string> bookmarks)
         {
             //using (WordprocessingDocument doc = WordprocessingDocument.Open(sourceDocPath, true))
             var isEditable = true;
@@ -47,7 +47,7 @@ namespace com.opusmagus.office.openxml
             }
         }
     
-        public static void ReplaceBookmarks(string sourceDocPath, string targetDocPath, Dictionary<string, string> bookmarks)
+        public void ReplaceBookmarks(string sourceDocPath, string targetDocPath, Dictionary<string, string> bookmarks)
         {
             bool isEditable = true;
 
@@ -68,31 +68,17 @@ namespace com.opusmagus.office.openxml
             }
         }
 
-        private static void replaceBookmarkText(BookmarkStart bookmarkStart, string bookmarkValue)
+        private void replaceBookmarkText(BookmarkStart bookmarkStart, string bookmarkValue)
         {
             var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
             var bookmarkRun = bookmarkStart.NextSibling<Run>();
-            if(bookmarkRun != null) {
-                //var xmlElement = bookmarkRun.GetFirstChild<OpenXmlElement>();
-                //bookmarkRun.RemoveChild(xmlElement);
+            if(bookmarkRun != null)
                 bookmarkRun.RemoveAllChildren();
-            }
             else {
                 bookmarkRun = new Run();
                 bookmarkStart.Parent.InsertAfter(bookmarkRun, bookmarkStart);
             }
-            bookmarkRun.AppendChild(new Text(bookmarkValue));
-            
-            /*/if (bookmarkStart.Name.InnerText.Equals("faxnr")) {
-                //var text = bookmarkStart.Descendants<Text>();
-                //text.
-                var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
-                var bookmarkRun = new Run();
-                bookmarkStart.Parent.InsertAfter(bookmarkRun, bookmarkStart);
-                bookmarkRun.AppendChild(new Text("26 83 68 98"));
-                //var bookmarkRun = bookmarkStart.NextSibling<Run>();
-                //(new Text("1888"));
-            }*/               
+            bookmarkRun.AppendChild(new Text(bookmarkValue));            
         }
     }
 }
