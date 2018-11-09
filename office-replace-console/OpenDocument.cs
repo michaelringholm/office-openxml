@@ -56,29 +56,12 @@ namespace com.opusmagus.office.openxml
             using (WordprocessingDocument doc = WordprocessingDocument.CreateFromTemplate(sourceDocPath, isEditable))
             {
                 var body = doc.MainDocumentPart.Document.Body;
-                var bookmarkStarts = body.Descendants<BookmarkStart>();
-                
+                var bookmarkStarts = body.Descendants<BookmarkStart>();                
 
                 foreach(var header in doc.MainDocumentPart.HeaderParts) {
-                    /*var elements = header.Header.Descendants<OpenXmlElement>();
-                    foreach(var ele in elements) {
-                        if(ele.InnerText == "15.102.2018")
-                            Debug.WriteLine("Found it!");
-                    }*/
-
                     var headerBookmarkStarts = header.Header.Descendants<BookmarkStart>();
                     bookmarkStarts = bookmarkStarts.Concat(headerBookmarkStarts);
-                    /*foreach(var bookmarkStart in bookmarkStarts) {
-                        if(bookmarkStart.Name.Value.StartsWith("Commentor_"))
-                            Debug.WriteLine("Found it!");
-                    }*/
-
                 } 
-                //doc.MainDocumentPart.
-                //var tables = doc.MainDocumentPart.Document.Descendants<Table>();
-                //var background = doc.MainDocumentPart.Document.Descendants<BookmarkStart>();
-                //var bmarks = background.Descendants<BookmarkStart>();                
-                //var parts = doc.MainDocumentPart.Document.Descendants<>();
 
                 foreach (var bookmarkStart in bookmarkStarts)
                 {
