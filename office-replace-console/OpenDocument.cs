@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml.Packaging;
@@ -11,13 +12,15 @@ namespace com.opusmagus.office.openxml
     {
         public static void ReplaceProperties(string sourceDocPath, string targetDocPath, Dictionary<string, string> bookmarks)
         {
-            using (WordprocessingDocument doc = WordprocessingDocument.Open("./resources/source/properties.docx", true))
+            //using (WordprocessingDocument doc = WordprocessingDocument.Open(sourceDocPath, true))
+            var isEditable = true;
+            using (WordprocessingDocument doc = WordprocessingDocument.CreateFromTemplate(sourceDocPath, isEditable))
             {
                 var body = doc.MainDocumentPart.Document.Body;                
 
                 foreach (var paragraph in body.Descendants<Paragraph>())
                 {
-                    Console.WriteLine(paragraph);
+                    Debug.WriteLine(paragraph);
                     /*if (paragraph.Text.Contains("##sagsid##"))
                     {
                         text.Text = text.Text.Replace("##sagsid##", "Sagsid: 199");
@@ -34,12 +37,13 @@ namespace com.opusmagus.office.openxml
               
                 foreach (var customProp in doc.CustomFilePropertiesPart.Properties.Descendants<CustomDocumentProperty>())
                 {
-                    Console.WriteLine($"Name={customProp.Name} Value={customProp.InnerText}");
+                    Debug.WriteLine($"Name={customProp.Name} Value={customProp.InnerText}");
                     //customProp.SetAttribute(customProp);
                     //customProp = 173;
                 }
 
-                doc.Save();
+                //doc.Save();
+                doc.SaveAs(targetDocPath);
             }
         }
     
@@ -52,49 +56,43 @@ namespace com.opusmagus.office.openxml
             {
                 var body = doc.MainDocumentPart.Document.Body;                
 
-
                 foreach (var bookmarkStart in body.Descendants<BookmarkStart>())
                 {
-                    Console.WriteLine($"bookmarkName={bookmarkStart.Name}");
-                    Console.WriteLine($"bookmarkValue={bookmarkStart.InnerText}");
-                    if (bookmarkStart.Name.InnerText.Equals("sagsnrtitel")) {
-                        //var text = bookmarkStart.Descendants<Text>();
-                        //text.
-                        var sibling = bookmarkStart.NextSibling();
-                        //(new Text("1888"));
-                    }
-                    if (bookmarkStart.Name.InnerText.Equals("sagsnr")) {
-                        //var text = bookmarkStart.Descendants<Text>();
-                        //text.
-                        var sibling = bookmarkStart.NextSibling();
-                        //sibling.AppendChild()
-                        //(new Text("1888"));
-                    }
-                    if (bookmarkStart.Name.InnerText.Equals("faxnr")) {
-                        //var text = bookmarkStart.Descendants<Text>();
-                        //text.
-                        var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
-                        var bookmarkRun = new Run();
-                        bookmarkStart.Parent.InsertAfter(bookmarkRun, bookmarkStart);
-                        bookmarkRun.AppendChild(new Text("26 83 68 98"));
-                        //var bookmarkRun = bookmarkStart.NextSibling<Run>();
-                        //(new Text("1888"));
-                    }    
-                    if (bookmarkStart.Name.InnerText.Equals("mobilnr")) {
-                        //var text = bookmarkStart.Descendants<Text>();
-                        //text.
-                        var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
-                        var bookmarkRun = bookmarkStart.NextSibling<Run>();
-                        var xmlElement = bookmarkRun.GetFirstChild<OpenXmlElement>();
-                        bookmarkRun.AppendChild(new Text("26 83 69 97"));
-                        bookmarkRun.RemoveChild(xmlElement);
-                        //bookmarkRun.InnerText = "test";
-                        //(new Text("1888"));
-                    }                                    
+                    Debug.WriteLine($"bookmarkName={bookmarkStart.Name}");
+                    Debug.WriteLine($"bookmarkValue={bookmarkStart.InnerText}");
+                    var bookmarkName = bookmarkStart.Name.InnerText;
+                    if(bookmarks.ContainsKey(bookmarkName))
+                        replaceBookmarkText(bookmarkStart, bookmarks.GetValueOrDefault(bookmarkName));
                 }                
-
                 doc.SaveAs(targetDocPath);
             }
+        }
+
+        private static void replaceBookmarkText(BookmarkStart bookmarkStart, string bookmarkValue)
+        {
+            var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
+            var bookmarkRun = bookmarkStart.NextSibling<Run>();
+            if(bookmarkRun != null) {
+                //var xmlElement = bookmarkRun.GetFirstChild<OpenXmlElement>();
+                //bookmarkRun.RemoveChild(xmlElement);
+                bookmarkRun.RemoveAllChildren();
+            }
+            else {
+                bookmarkRun = new Run();
+                bookmarkStart.Parent.InsertAfter(bookmarkRun, bookmarkStart);
+            }
+            bookmarkRun.AppendChild(new Text(bookmarkValue));
+            
+            /*/if (bookmarkStart.Name.InnerText.Equals("faxnr")) {
+                //var text = bookmarkStart.Descendants<Text>();
+                //text.
+                var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
+                var bookmarkRun = new Run();
+                bookmarkStart.Parent.InsertAfter(bookmarkRun, bookmarkStart);
+                bookmarkRun.AppendChild(new Text("26 83 68 98"));
+                //var bookmarkRun = bookmarkStart.NextSibling<Run>();
+                //(new Text("1888"));
+            }*/               
         }
     }
 }
