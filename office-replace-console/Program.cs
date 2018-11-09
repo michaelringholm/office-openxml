@@ -24,9 +24,11 @@ namespace com.opusmagus.office.openxml
 
             /*var bookmarkReplacements = new Dictionary<string, string>();
             bookmarkReplacements.Add("Commentor_adresse", "Andevej 14");
-            bookmarkReplacements.Add("Commentor_navn", "Anders And");
+            bookmarkReplacements.Add("Commentor_navn_header", "Anders And");
+            bookmarkReplacements.Add("Commentor_navn_body", "Anders And");
             bookmarkReplacements.Add("Commentor_registreringsnummer", "1234 1234512345");
-            openDocument.ReplaceBookmarks("../local/Tekstforslag varslingsbrev december 2018 Version 4.docx", "../local/Tekstforslag varslingsbrev december 2018 Version 4 - REPLACED.docx", bookmarkReplacements);*/
+            bookmarkReplacements.Add("Commentor_dato", DateTime.Now.ToString("dd.MM.yyyy"));
+            openDocument.ReplaceBookmarks("../local/Tekstforslag varslingsbrev december 2018 Version 5.docx", "../local/Tekstforslag varslingsbrev december 2018 Version 5 - REPLACED.docx", bookmarkReplacements);*/
 
             var bookmarkReplacements = new Dictionary<string, string>();
             bookmarkReplacements.Add("mobilnr", "26 83 69 97");
