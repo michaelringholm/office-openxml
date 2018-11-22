@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Office OpenXML Demo";
+}
+
+<div class="row">
+    <div class="col">
+        <h1>Office OpenXML Demo</h1>
+
+        Skabelon:
+        <br />
+        <select id="templates"></select>
+        <br />
+        Tekst:
+        <br />
+        <textarea id="bodyText"></textarea>
+        <br />
+        <button id="btnCreatePDF">Go</button>
+        <br />
+        <div id="pdfLink">No PDF generated yet!</div>
+        <br /><br />
+        <a href="https://localhost:5001/api/doc/modify/Template1.docx">Modify Doc</a> <br/>
+        <a href="https://localhost:5001/api/doc/templates">Get Templates</a>
+    </div>
+</div>

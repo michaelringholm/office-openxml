@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>com.opusmagus.office.openxml</RootNamespace>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml.DotNet.Core" Version="1.0.4"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1"/>
+  </ItemGroup>
+</Project>
