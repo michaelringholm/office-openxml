@@ -26,6 +26,9 @@ function createPDF() {
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(data),
+        beforeSend: function() {
+            $("#pdfLink").html("working...");
+        },
         success: function(pdfGuid) {
             $("#pdfLink").html('<a id="pdfGuid" href="/api/doc/preview/' + pdfGuid + '">Preview</a>');
         }

@@ -6,7 +6,8 @@
     <Version>1.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml.DotNet.Core" Version="1.0.4"/>
+    <!--<PackageReference Include="DocumentFormat.OpenXml.DotNet.Core" Version="1.0.4"/>-->
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1"/>    
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1"/>
   </ItemGroup>
 </Project>
