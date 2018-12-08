@@ -71,7 +71,9 @@ namespace com.opusmagus.office.openxml
                     if(bookmarks.ContainsKey(bookmarkName))
                         replaceBookmarkText(bookmarkStart, bookmarks.GetValueOrDefault(bookmarkName));
                 }                
-                doc.SaveAs(targetDocPath);
+                var openXMLPackage = doc.SaveAs(targetDocPath);
+                openXMLPackage.Close();
+                doc.Close();
             }
         }
 

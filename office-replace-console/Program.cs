@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.CustomProperties;
 using DocumentFormat.OpenXml;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace com.opusmagus.office.openxml
 {
@@ -11,21 +12,26 @@ namespace com.opusmagus.office.openxml
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Office replace demo started...");
+            var startTime = DateTime.Now;
+            Console.WriteLine($"Office replace demo started at {startTime}...");
             
-            OpenDocument.ReplaceProperties("./resources/source/bookmarks.docx", "./resources/target/bookmarks-replaced.docx", null);
+            var diContainer = new ServiceCollection();
+            diContainer.AddSingleton<IOpenDocument, OpenDocument>();
+            var diProvider = diContainer.BuildServiceProvider();
+            var openDocument = diProvider.GetService<IOpenDocument>(); 
             
-            var bookmarkReplacements = new Dictionary<string, string>();
-            bookmarkReplacements.Add("mobilnr", "26 83 69 97");
-            bookmarkReplacements.Add("faxnr", "26 83 68 98");
-            OpenDocument.ReplaceBookmarks("./resources/source/bookmarks.docx", "./resources/target/bookmarks-replaced.docx", bookmarkReplacements);
+            openDocument.ReplaceProperties("./resources/source/properties.docx", "./resources/target/properties-replaced.docx", null);
 
-            bookmarkReplacements = new Dictionary<string, string>();
-            bookmarkReplacements.Add("mobilnr", "26 83 69 97");
-            bookmarkReplacements.Add("faxnr", "26 83 68 98");            
-            OpenDocument.ReplaceBookmarks("./resources/source/Varslingsbrev v4.docx", "./resources/target/Varslingsbrev v4 - Replaced.docx", bookmarkReplacements);
+            var bookmarkReplacements = new Dictionary<string, string>();
+            bookmarkReplacements.Add("Commentor_adresse", "Andevej 14");
+            bookmarkReplacements.Add("Commentor_navn_header", "Anders And");
+            bookmarkReplacements.Add("Commentor_navn_body", "Anders And");
+            bookmarkReplacements.Add("Commentor_registreringsnummer", "1234 1234512345");
+            bookmarkReplacements.Add("Commentor_dato", DateTime.Now.ToString("dd.MM.yyyy"));
+            openDocument.ReplaceBookmarks("../local/Tekstforslag varslingsbrev december 2018 Version 5.docx", "../local/Tekstforslag varslingsbrev december 2018 Version 5 - REPLACED.docx", bookmarkReplacements);
             
-            Console.WriteLine("Office replace demo ended.");
+            var endTime = DateTime.Now;
+            Console.WriteLine($"Office replace demo ended. Duration was {endTime.Millisecond-startTime.Millisecond}.");
         }
     }
 }
