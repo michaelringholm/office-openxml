@@ -90,7 +90,18 @@ namespace com.opusmagus.office.openxml
                         bookmarkRun.RemoveChild(xmlElement);
                         //bookmarkRun.InnerText = "test";
                         //(new Text("1888"));
-                    }                                    
+                    }     
+                    if (bookmarkStart.Name.InnerText.StartsWith("Commentor_")) {
+                        //var text = bookmarkStart.Descendants<Text>();
+                        //text.
+                        var bookmarkEnd = bookmarkStart.NextSibling<BookmarkEnd>();
+                        var bookmarkRun = bookmarkStart.NextSibling<Run>();
+                        var xmlElement = bookmarkRun.GetFirstChild<OpenXmlElement>();
+                        //bookmarkRun.AppendChild(new Text("26 83 69 97"));
+                        //bookmarkRun.RemoveChild(xmlElement);
+                        //bookmarkRun.InnerText = "test";
+                        //(new Text("1888"));
+                    }                                
                 }                
 
                 doc.SaveAs(targetDocPath);

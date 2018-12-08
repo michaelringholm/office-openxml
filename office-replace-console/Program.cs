@@ -19,6 +19,11 @@ namespace com.opusmagus.office.openxml
             bookmarkReplacements.Add("mobilnr", "26 83 69 97");
             bookmarkReplacements.Add("faxnr", "26 83 68 98");
             OpenDocument.ReplaceBookmarks("./resources/source/bookmarks.docx", "./resources/target/bookmarks-replaced.docx", bookmarkReplacements);
+
+            bookmarkReplacements = new Dictionary<string, string>();
+            bookmarkReplacements.Add("mobilnr", "26 83 69 97");
+            bookmarkReplacements.Add("faxnr", "26 83 68 98");            
+            OpenDocument.ReplaceBookmarks("./resources/source/Varslingsbrev v4.docx", "./resources/target/Varslingsbrev v4 - Replaced.docx", bookmarkReplacements);
             
             Console.WriteLine("Office replace demo ended.");
         }
