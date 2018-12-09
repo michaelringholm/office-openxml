@@ -56,7 +56,7 @@ namespace office_openxml_web
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+        
             app.UseMvc();
         }
     }

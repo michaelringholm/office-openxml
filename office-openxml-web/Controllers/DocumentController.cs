@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using com.opusmagus.azure.graph;
-using com.opusmagus.cloud.blobs;
 using com.opusmagus.office.openxml;
+using com.opusmagus.cloud.blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Graph;
@@ -19,13 +19,22 @@ namespace office_openxml_web.Pages
         private IDocumentProvider docProvider;
         private string blobContainerName;
         private string blobContainerConnString;
+
         public DocumentController(IOpenDocument openDocument, IDocumentProvider docProvider, IConfiguration configuration)
         {
             this.openDocument = openDocument;
             this.docProvider = docProvider;
-            blobContainerName = "sample-blob-container";
+            blobContainerName = configuration.GetSection("blobContainerName").Value; //"sample-blob-container";
             blobContainerConnString = configuration.GetSection("blobContainerConnString").Value;
         }
+
+        /*public DocumentController(IOpenDocument openDocument, IDocumentProvider docProvider, string blobContainerName, string blobContainerConnString)
+        {
+            this.openDocument = openDocument;
+            this.docProvider = docProvider;
+            this.blobContainerName = blobContainerName;
+            this.blobContainerConnString = blobContainerConnString;
+        }*/       
 
         [Route("preview/{pdfGuid}"), AcceptVerbs("Get")]
         public ActionResult preview(string pdfGuid)
@@ -44,6 +53,7 @@ namespace office_openxml_web.Pages
             var blobContents = blobService.getBlobContents(blobContainerConnString, blobContainerName, documentHeader.BlobItemName);
             var tempGUID = Guid.NewGuid().ToString();
             var tempDocPath = $"./local/{tempGUID}";
+            System.IO.Directory.CreateDirectory(tempDocPath);
             System.IO.File.WriteAllBytes($"{tempDocPath}.docx", blobContents);
 
             var bookmarkReplacements = new Dictionary<string, string>();
